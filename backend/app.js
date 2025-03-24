@@ -6,6 +6,8 @@ import employeesRoutes from "./src/routes/employees.js";
 import branchesRoutes from "./src/routes/branches.js"
 import reviewsRoutes from "./src/routes/reviews.js";
 import evaluationsRoutes from "./src/routes/evaluations.js";
+import registerEmployeesRoutes from "./src/controllers/registerEmployeesController.js";
+import loginRoutes from "./src/controllers/loginController.js";
 
 // Creo una constante que es igual
 // a la libreria que importé y la ejecuta
@@ -17,10 +19,13 @@ app.use(express.json());
 // Definir la ruta
 app.use("/api/products", productsRoutes);
 app.use("/api/clients", clientsRoutes);
-app.use("/api/employees", employeesRoutes);
+app.use("/api/employees", employeesRoutes); º
 app.use("/api/branches", branchesRoutes);
 app.use("/api/reviews", reviewsRoutes);
 app.use("/api/evaluations", evaluationsRoutes);
+
+app.use("/api/registerEmployees", registerEmployeesRoutes);
+app.use("/api/login", loginRoutes);
 
 // Exporto la constante para poder usar express en otros lados
 export default app;
