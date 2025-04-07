@@ -1,4 +1,4 @@
-const registerClientsController = {};
+
 
 import bcryptjs from "bcryptjs"
 import jsonwebtoken from "jsonwebtoken" 
@@ -6,6 +6,8 @@ import nodemailer from "nodemailer"
 import crypto from "crypto"
 import clientsModel from "../models/Clients.js"
 import { config } from "../config.js";
+
+const registerClientsController = {};
 
 // I N S E R T
 registerClientsController.register = async (req, res) => {
@@ -22,7 +24,6 @@ registerClientsController.register = async (req, res) => {
   
       const newClient = new clientsModel({name, lastName, birthday, email, password: passwordHash, telephone, dui: dui || null, isVerified: isVerified || false});
       await newClient.save();
-      res.json({ message: "client saved" });
 
       //Genero un codigo aleatorio
       const verificationCode = crypto.randomBytes(3).toString("hex")
@@ -35,7 +36,7 @@ registerClientsController.register = async (req, res) => {
           //3- cuando expira
           {expiresIn: "2h"},
       )
-        res.cookie("VerificationToken", tokenCode, {maxAge: "2*60*60*1000"});
+        res.cookie("VerificationToken", tokenCode, {maxAge: 2*60*60*1000});
 
         //Enviar correo electronico
         //1. Transportar => quien lo envia
@@ -75,7 +76,7 @@ registerClientsController.register = async (req, res) => {
   registerClientsController.verifyCodeEmail = async (req, res) => {
     const { verificationCode  } = req.body;
 
-    const token = req.cookies.verificationToken;
+    const token = req.cookies.VerificationToken;
 
     try{
         //verificar y decodificar el token
@@ -95,7 +96,7 @@ registerClientsController.register = async (req, res) => {
         res.json({message: "email verified successfull"})
 
         //quito la cookie con el token
-        res.clearCookie("VerificacionToken");
+        res.clearCookie("VerificationToken");
 
     }catch(error){
         res.json({message: "error"});
