@@ -1,4 +1,5 @@
 import jsonwebtoken from "jsonwebtoken"; //Token
+import bcryptjs from "bcryptjs";
 
 import clientsModel from "../models/Clients.js";
 import employeeModel from "../models/Employees.js";
@@ -95,6 +96,54 @@ passwordRecoveryController.verifyCode = async (req, res) => {
   } catch(error){
     console.log("error", error);
   }
+};
+
+passwordRecoveryController.newPassword = async(req, res) => {
+ const { newPassword } = req.body;
+
+ try{
+  //acceder al token que esta en las cookies
+  const token = req.cookies.tokenRecoveryCode
+
+  //decodificar el token
+  const decoded = jsonwebtoken.verify(token, config.JWT.secret)
+
+  //verificar si el codigo ya fue verificado
+
+  if (!decoded.verified) {
+    return res.json({message: "code not verified"})
+  }
+
+  let user;
+
+
+  const {email} = decoded
+
+  //Encriptar la contraseña
+  const hashedPassword = await bcryptjs.hash(newPassword, 10)
+
+  //guardamos la contraseña en base de datos
+  if( decoded.userType == "client"){
+    user = await clientsModel.findOneAndUpdate(
+      {email},
+      {password: hashedPassword},
+      {new: true}
+    )
+  } else if ( decoded.userType == "employee"){
+    user = await clientsModel.findOneAndUpdate(
+      {email},
+      {password: hashedPassword},
+      {new: true}
+    )
+  }
+
+  res.clearCookie("tokenRecoveryCode")
+
+  res.json({message: "password update"})
+
+ }catch (error) {
+  console.log("error" + error);
+ }
 };
 
 export default passwordRecoveryController;
