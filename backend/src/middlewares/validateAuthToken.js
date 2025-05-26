@@ -1,9 +1,8 @@
 import jsonwebtoken from 'jsonwebtoken';
 import { config } from '../config.js';
 
-export const validateAuthToken = (allowedUserTypes = []) => {}
-
-    return (req, res, next) => {
+export const validateAuthToken = (allowedUserTypes = []) => {
+ return (req, res, next) => {
         try {
             if (!req.cookies){
             return res.json({ message: 'No token provided' });
@@ -24,4 +23,7 @@ export const validateAuthToken = (allowedUserTypes = []) => {}
         } catch (error) {
             return res.status(401).json({ message: 'Invalid token' });
         }
-    }
+    };
+}
+
+   

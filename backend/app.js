@@ -13,6 +13,7 @@ import logoutRoutes from "./src/routes/logout.js"
 import registerClientsRoutes from "./src/routes/registerClients.js";
 import passwordRecoveryRoutes from "./src/routes/passwordRecovery.js";
 import blogRoutes from "./src/routes/blog.js";
+import cors from 'cors';
 import { validateAuthToken } from "./src/middlewares/validateAuthToken.js";
 // Creo una constante que es igual
 // a la libreria que importé y la ejecuta
@@ -23,6 +24,12 @@ app.use(express.json());
 
 // que acepte cookies
 app.use(cookieParser());
+
+// Configurar CORS
+app.use(cors({
+  origin: 'http://localhost:5173', // Permitir solicitudes desde el frontend
+  credentials: true // Si necesitas enviar cookies o encabezados de autenticación
+}));
 
 // Definir la ruta
 app.use("/api/products", productsRoutes);
