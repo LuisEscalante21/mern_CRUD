@@ -203,7 +203,6 @@ function Products() {
                     <span className="required-asterisk">*</span>
                   </label>
                   <div className="price-container">
-                    <span className="price-prefix">$</span>
                     <input
                       type="number"
                       name="price"

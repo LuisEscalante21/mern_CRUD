@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Products from "./pages/Products/Products";
-import Employees from "./pages/Employees";
+import Employees from "./pages/Employees/Employees";
 import Clients from "./pages/Clients";
 
 function App() {

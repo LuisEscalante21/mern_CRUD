@@ -27,25 +27,11 @@ const employeesSchema = new Schema(
       require: true,
       maxLength: 100,
     },
-    birthday: {
-      type: Date,
-      require: true,
-    },
     email: {
         type: String,
         require: true,
         maxLength: 100,
     },
-    address: {
-        type: String,
-        require: true,
-        maxLength: 100,
-    }, 
-    hireDate: {
-        type: Date,
-        require: true,
-        maxLength: 100,
-    }, 
     password: {
         type: String,
         require: true,
@@ -60,10 +46,6 @@ const employeesSchema = new Schema(
         type: String,
         require: true,
         min: 0,
-    },
-    isssNumber:{
-        type: Boolean,
-        require: true,
     },
     isVerified:{
         type: String,

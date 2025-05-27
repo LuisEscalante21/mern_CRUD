@@ -7,7 +7,7 @@ import { config } from "../config.js";
 
 // I N S E R T
 registerEmployeesController.register = async (req, res) => {
-  const { name, lastName, birthday, email, address, hireDate, password, telephone, dui, isssNumber, isVerified } = req.body;
+  const { name, lastName, email, password, telephone, dui, isVerified} = req.body;
   try{
 
     //Verifica si existe el empleado
@@ -18,7 +18,7 @@ registerEmployeesController.register = async (req, res) => {
 
     const passwordHash = await bcryptjs.hash(password, 10);
 
-    const newEmployee = new Employee({name, lastName, birthday, email, address, hireDate, password: passwordHash, telephone, dui, isssNumber, isVerified });
+    const newEmployee = new Employee({name, lastName, email, password: passwordHash, telephone, dui, isVerified });
     await newEmployee.save();
     res.json({ message: "employee saved" });
 

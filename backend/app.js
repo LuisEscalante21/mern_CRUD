@@ -34,7 +34,7 @@ app.use(cors({
 // Definir la ruta
 app.use("/api/products", productsRoutes);
 app.use("/api/clients", clientsRoutes);
-app.use("/api/employees", validateAuthToken(["employee", "Admin"]), employeesRoutes); 
+app.use("/api/employees", employeesRoutes); 
 app.use("/api/branches", branchesRoutes);
 app.use("/api/reviews", reviewsRoutes);
 app.use("/api/evaluations", evaluationsRoutes);
