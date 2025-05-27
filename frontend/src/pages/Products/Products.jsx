@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Package, DollarSign, Hash, FileText, CheckCircle, AlertCircle, Eye, Edit, Trash2} from "lucide-react";
+import { Package, DollarSign, Hash, FileText, Eye, Edit, Trash2 } from "lucide-react";
+import Swal from "sweetalert2";
 import "./Products.css";
 
 function Products() {
@@ -10,37 +11,42 @@ function Products() {
     stock: "",
   });
 
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null); // Estado para el producto en edición
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/products/${id}`, {
-        method: "DELETE",
+      const result = await Swal.fire({
+        title: "¿Estás seguro?",
+        text: "No podrás revertir esta acción.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
       });
-  
-      if (response.ok) {
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product.id !== id && product._id !== id)
-        );
-        setMessage("Producto eliminado correctamente.");
-        setMessageType("success");
-        setTimeout(() => {
-          setMessage("");
-          setMessageType("");
-        }, 2000);
-      } else {
-        setMessage("Error al eliminar el producto.");
-        setMessageType("error");
+
+      if (result.isConfirmed) {
+        const response = await fetch(`http://localhost:4000/api/products/${id}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.id !== id && product._id !== id)
+          );
+          Swal.fire("Eliminado", "El producto ha sido eliminado correctamente.", "success");
+        } else {
+          Swal.fire("Error", "Error al eliminar el producto.", "error");
+        }
       }
     } catch (error) {
-      setMessage("Error de conexión con el servidor.");
-      setMessageType("error");
+      Swal.fire("Error", "Error de conexión con el servidor.", "error");
     }
   };
-    
+
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -65,50 +71,70 @@ function Products() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-
-    if (message) {
-      setMessage("");
-      setMessageType("");
-    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!form.name || form.price === "" || form.stock === "") {
-      setMessage("Por favor, completa los campos obligatorios.");
-      setMessageType("error");
+      Swal.fire("Error", "Por favor, completa los campos obligatorios.", "error");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/products", {
-        method: "POST", 
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          price: Number(form.price),
-          stock: Number(form.stock),
-        }),
-      });
+      if (editingProduct) {
+        // Modo edición: actualizar producto
+        const res = await fetch(`http://localhost:4000/api/products/${editingProduct.id || editingProduct._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...form,
+            price: Number(form.price),
+            stock: Number(form.stock),
+          }),
+        });
 
-      if (res.ok) {
-        setMessage("Producto agregado correctamente.");
-        setMessageType("success");
-        setForm({ name: "", description: "", price: "", stock: "" });
-        // Recargar la lista de productos después de agregar uno nuevo
-        fetchProducts();
-        setTimeout(() => {
-          setMessage("");
-          setMessageType("");
-        }, 2000);
+        if (res.ok) {
+          Swal.fire("Éxito", "Producto actualizado correctamente.", "success");
+          setEditingProduct(null); // Salir del modo edición
+          setForm({ name: "", description: "", price: "", stock: "" }); // Limpiar el formulario
+          fetchProducts(); // Actualizar la lista de productos
+        } else {
+          Swal.fire("Error", "Error al actualizar el producto.", "error");
+        }
       } else {
-        setMessage("Error al agregar el producto.");
-        setMessageType("error");
+        // Modo agregar: agregar producto
+        const res = await fetch("http://localhost:4000/api/products", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...form,
+            price: Number(form.price),
+            stock: Number(form.stock),
+          }),
+        });
+
+        if (res.ok) {
+          Swal.fire("Éxito", "Producto agregado correctamente.", "success");
+          setForm({ name: "", description: "", price: "", stock: "" }); // Limpiar el formulario
+          fetchProducts(); // Actualizar la lista de productos
+        } else {
+          Swal.fire("Error", "Error al agregar el producto.", "error");
+        }
       }
     } catch (error) {
-      setMessage("Error de conexión con el servidor.");
-      setMessageType("error");
+      Swal.fire("Error", "Error de conexión con el servidor.", "error");
     }
+  };
+
+  const handleEdit = (product) => {
+    setEditingProduct(product); // Establece el producto en edición
+    setForm({
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+    }); // Rellena el formulario con los datos del producto
   };
 
   return (
@@ -121,8 +147,12 @@ function Products() {
             <div className="products-icon-container">
               <Package className="products-icon" />
             </div>
-            <h1 className="products-title">Agregar Producto</h1>
-            <p className="products-subtitle">Completa la información del nuevo producto</p>
+            <h1 className="products-title">{editingProduct ? "Editar Producto" : "Agregar Producto"}</h1>
+            <p className="products-subtitle">
+              {editingProduct
+                ? "Modifica la información del producto seleccionado"
+                : "Completa la información del nuevo producto"}
+            </p>
           </div>
 
           {/* Form Card */}
@@ -211,28 +241,11 @@ function Products() {
               {/* Submit Button */}
               <div className="submit-section">
                 <button type="submit" className="submit-button">
-                  Agregar Producto
+                  {editingProduct ? "Actualizar Producto" : "Agregar Producto"}
                 </button>
               </div>
             </div>
-
-            {/* Message */}
-            {message && (
-              <div className={`message ${messageType}`}>
-                {messageType === "success" ? (
-                  <CheckCircle className="message-icon" />
-                ) : (
-                  <AlertCircle className="message-icon" />
-                )}
-                <p className="message-text">{message}</p>
-              </div>
-            )}
           </form>
-
-          {/* Footer Info */}
-          <div className="products-footer">
-            Los campos marcados con <span className="footer-asterisk">*</span> son obligatorios
-          </div>
         </div>
 
         {/* Sección de Lista de Productos */}
@@ -243,7 +256,8 @@ function Products() {
             </div>
             <h2 className="products-list-title">Productos Registrados</h2>
             <p className="products-list-subtitle">
-              {products.length} producto{products.length !== 1 ? 's' : ''} encontrado{products.length !== 1 ? 's' : ''}
+              {products.length} producto{products.length !== 1 ? "s" : ""} encontrado
+              {products.length !== 1 ? "s" : ""}
             </p>
           </div>
 
@@ -262,32 +276,33 @@ function Products() {
             ) : (
               <div className="products-grid">
                 {products.map((product) => (
-                <div key={product.id || product._id} className="product-card">
-                  <div className="product-header">
-                    <h3 className="product-name">{product.name}</h3>
-                    <div className="product-actions">
-                      <button>
-                        <Edit className="action-icon" />
-                      </button>
-                      <button onClick={() => handleDelete(product.id || product._id)}>
-                        <Trash2 className="action-icon" />
-                      </button>
+                  <div key={product.id || product._id} className="product-card">
+                    <div className="product-header">
+                      <h3 className="product-name">{product.name}</h3>
+                      <div className="product-actions">
+                        <button onClick={() => handleEdit(product)}>
+                          <Edit className="action-icon" />
+                        </button>
+                        <button onClick={() => handleDelete(product.id || product._id)}>
+                          <Trash2 className="action-icon" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                    
+
                     {product.description && (
                       <p className="product-description">{product.description}</p>
                     )}
-                    
-                    <div className="product-details">
-                      <div className="product-price">
-                        <span className="detail-value">${Number(product.price).toFixed(2)}</span>
+
+                      <div className="product-details">
+                        <div className="product-price">
+                          <DollarSign className="detail-icon" /> {/* Ícono de dólar */}
+                          <span className="detail-value">{Number(product.price).toFixed(2)}</span>
+                        </div>
+                        <div className="product-stock">
+                          <Hash className="detail-icon" />
+                          <span className="detail-value">{product.stock} unidades</span>
+                        </div>
                       </div>
-                      <div className="product-stock">
-                        <Hash className="detail-icon" />
-                        <span className="detail-value">{product.stock} unidades</span>
-                      </div>
-                    </div>
                   </div>
                 ))}
               </div>
