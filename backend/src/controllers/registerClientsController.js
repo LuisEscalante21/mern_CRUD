@@ -11,7 +11,7 @@ const registerClientsController = {};
 
 // I N S E R T
 registerClientsController.register = async (req, res) => {
-    const { name, lastName, birthday, email, password, telephone, dui, isVerified  } = req.body;
+    const {name, lastName, email, password, telephone, dui, isVerified } = req.body;
     try{
   
       //Verifica si existe el cliente
@@ -22,7 +22,7 @@ registerClientsController.register = async (req, res) => {
   
       const passwordHash = await bcryptjs.hash(password, 10);
   
-      const newClient = new clientsModel({name, lastName, birthday, email, password: passwordHash, telephone, dui: dui || null, isVerified: isVerified || false});
+      const newClient = new clientsModel({name, lastName, email, password: passwordHash, telephone, dui: dui || null, isVerified: isVerified || false});
       await newClient.save();
 
       //Genero un codigo aleatorio

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { User,  Mail, Phone, Edit, Trash2, Key } from "lucide-react";
+import { User,  Mail, Phone, Edit, Trash2, Key, Eye } from "lucide-react";
 import Swal from "sweetalert2";
 import "./Employees.css";
 
 function Employees() {
   const [form, setForm] = useState({
     name: "",
-    lastname: "",
+    lastName: "",
     email: "",
     telephone: "",
     dui: "",
@@ -79,7 +79,7 @@ function Employees() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.lastname || !form.email || !form.telephone) {
+    if (!form.name || !form.lastName || !form.email || !form.telephone) {
       Swal.fire("Error", "Por favor, completa los campos obligatorios.", "error");
       return;
     }
@@ -98,7 +98,7 @@ function Employees() {
           setEditingEmployee(null);
           setForm({
             name: "",
-            lastname: "",
+            lastName: "",
             email: "",
             telephone: "",
             dui: "",
@@ -120,7 +120,7 @@ function Employees() {
           Swal.fire("Éxito", "Empleado agregado correctamente.", "success");
           setForm({
             name: "",
-            lastname: "",
+            lastName: "",
             email: "",
             telephone: "",
             dui: "",
@@ -188,9 +188,9 @@ function Employees() {
                 </label>
                 <input
                   type="text"
-                  name="lastname"
+                  name="lastName"
                   maxLength={100}
-                  value={form.lastname}
+                  value={form.lastName}
                   onChange={handleChange}
                   placeholder="Ej: Pérez"
                   className="form-input"
@@ -305,6 +305,9 @@ function Employees() {
         {/* Lista de empleados */}
         <div className="employees-list-wrapper">
           <div className="employees-list-header">
+          <div className="employees-list-icon-container">
+              <Eye className="employees-list-icon" />
+            </div>
             <h2 className="employees-list-title">Empleados Registrados</h2>
             <p className="employees-list-subtitle">
               {employees.length} empleado{employees.length !== 1 ? "s" : ""} encontrado
@@ -331,7 +334,7 @@ function Employees() {
       <div className="employee-header">
         {/* Nombre y Apellido */}
         <h3 className="employee-name">
-          {employee.name} {employee.lastname}
+          {employee.name} {employee.lastName}
         </h3>
         <div className="employee-actions">
           <button onClick={() => handleEdit(employee)}>

@@ -23,7 +23,7 @@ function NavBar() {
     <nav style={styles.nav}>
       <Link to="/" style={styles.link} className="nav-link">Productos</Link>
       <Link to="/employees" style={styles.link} className="nav-link">Empleados</Link>
-      <Link to="/clients" style={styles.link} className="nav-link">Clientes</Link>
+      <Link to="/branches" style={styles.link} className="nav-link">Sucursales</Link>
     </nav>
   );
 }

@@ -1,0 +1,269 @@
+.branches-container {
+    min-height: calc(100vh - 4rem);
+    padding: 6rem 7rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .branches-main-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  
+  @media (min-width: 1200px) {
+    .branches-main-wrapper {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .branches-wrapper {
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+  
+  .branches-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .branches-icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background: linear-gradient(90deg, #2563eb, #7c3aed);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+  
+  .branches-icon {
+    width: 2rem;
+    height: 2rem;
+    color: white;
+  }
+  
+  .branches-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+  
+  .branches-subtitle {
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .branches-form {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 2rem;
+    border: 1px solid #f3f4f6;
+  }
+  
+  .form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Form groups */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-label {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .label-icon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
+  
+  .label-icon.blue {
+    color: #2563eb;
+  }
+  .label-icon.green {
+    color: #059669;
+  }
+  .label-icon.orange {
+    color: #ea580c;
+  }
+  .label-icon.purple {
+    color: #7c3aed;
+  }
+  
+  .required-asterisk {
+    color: #ef4444;
+    margin-left: 0.25rem;
+  }
+  
+  /* Form inputs */
+  .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+  }
+  
+  .form-input:focus {
+    outline: none;
+    background-color: white;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #3b82f6;
+  }
+  
+  /* Submit section */
+  .submit-section {
+    padding-top: 1rem;
+  }
+  
+  .submit-button {
+    width: 100%;
+    background: linear-gradient(90deg, #2563eb, #7c3aed);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    transform: scale(1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background: linear-gradient(90deg, #1d4ed8, #6d28d9);
+    transform: scale(1.02);
+  }
+  
+  .submit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
+  }
+  
+  /* Branches list styles */
+  .branches-list-wrapper {
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+  
+  .branches-list-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .branches-list-icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background: linear-gradient(90deg, #059669, #0d9488);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+  
+  .branches-list-icon {
+    width: 2rem;
+    height: 2rem;
+    color: white;
+  }
+  
+  .branches-list-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+  
+  .branches-list-subtitle {
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .branches-list-container {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 2rem;
+    border: 1px solid #f3f4f6;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  /* Grid layout for branches */
+  .branches-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .branch-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    transition: all 0.2s ease;
+  }
+  
+  .branch-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: #d1d5db;
+  }
+  
+  .branch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  
+  .branch-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+    flex: 1;
+  }
+  
+  .branch-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
+  }
+  
+  .action-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .branch-address,
+  .branch-telephone,
+  .branch-schedule {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin: 0.25rem 0;
+  }
