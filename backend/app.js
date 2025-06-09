@@ -15,6 +15,11 @@ import passwordRecoveryRoutes from "./src/routes/passwordRecovery.js";
 import blogRoutes from "./src/routes/blog.js";
 import cors from 'cors';
 import { validateAuthToken } from "./src/middlewares/validateAuthToken.js";
+import swaggerUI from "swagger-ui-express";
+
+import fs from "fs";
+import path from "path";
+
 // Creo una constante que es igual
 // a la libreria que importé y la ejecuta
 const app = express();
@@ -24,6 +29,14 @@ app.use(express.json());
 
 // que acepte cookies
 app.use(cookieParser());
+
+//utilizar el sistema de archivos para leer el JSON de swagger y ver mi documentación
+const swaggerDocument = JSON.parse(fs.readFileSync(
+  path.resolve("./tlgb-cocacolaMERN-1.0.0-resolved.json"),
+  "utf-8")
+)
+
+app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 // Configurar CORS
 app.use(cors({
