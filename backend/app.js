@@ -17,6 +17,7 @@ import cors from 'cors';
 import { validateAuthToken } from "./src/middlewares/validateAuthToken.js";
 import swaggerUI from "swagger-ui-express";
 import TasksRoutes from "./src/routes/tasks.js";
+import salesRoutes from "./src/routes/sales.js";
 
 import fs from "fs";
 import path from "path";
@@ -62,6 +63,8 @@ app.use("/api/passwordRecovery", passwordRecoveryRoutes);
 
 app.use("/api/blog", blogRoutes);
 app.use("/api/tasks", TasksRoutes);
+
+app.use("/api/sales", salesRoutes);
 
 // Exporto la constante para poder usar express en otros lados
 export default app;
