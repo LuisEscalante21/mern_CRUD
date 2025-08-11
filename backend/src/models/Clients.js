@@ -52,6 +52,14 @@ const clientsSchema = new Schema(
         type: Boolean,
         require: true,
     },
+    loginAttempts: {
+      type: Number,
+      default: 0,
+    },
+    lockTime: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
