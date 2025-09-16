@@ -18,6 +18,7 @@ import { validateAuthToken } from "./src/middlewares/validateAuthToken.js";
 import swaggerUI from "swagger-ui-express";
 import TasksRoutes from "./src/routes/tasks.js";
 import salesRoutes from "./src/routes/sales.js";
+import limiter from "./src/middlewares/rateLimiter.js";
 
 import fs from "fs";
 import path from "path";
@@ -31,6 +32,9 @@ app.use(express.json());
 
 // que acepte cookies
 app.use(cookieParser());
+
+// Aplico el rate limiter a todas las rutas
+app.use(limiter);
 
 //utilizar el sistema de archivos para leer el JSON de swagger y ver mi documentación
 const swaggerDocument = JSON.parse(fs.readFileSync(
